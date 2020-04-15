@@ -179,13 +179,16 @@ public class Tromino_puzzle {
         }
     }
     
+    public static void setMC(int[][] board, int msx, int msy){
+        board[msx][msy] = 9;
+    }
+    
     public static void main(String[] args) {
-        int msx = 2;
-        int msy = 2;
         int[][] board = new int[16][16];
-        board[2][2] = 9;
+        
+        setMC(board, 3,3);
 
-        tile(board,msx,msy);
+        tile(board,3,3);
         viewBoard(board[0].length,board);
     }
     
