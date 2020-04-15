@@ -4,9 +4,6 @@
  * and open the template in the editor.
  */
 package tromino_puzzle;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Random;
 /**
  *
@@ -15,9 +12,12 @@ import java.util.Random;
 public class Tromino_puzzle {
     public static int pNum = 1;
     
-    public static int ranPNum(){
-        Random r = new Random();
-        return r.nextInt((4-1)+1)+1;
+    public static void inrPNum(){
+        if(pNum>3){
+            pNum=1;
+        }else{
+            pNum++;
+        }
     }
     
     //mengisi puzzle untuk board 2x2
@@ -139,9 +139,10 @@ public class Tromino_puzzle {
         return msPos;
     }
     
-    public static void tile(int[][] board, int mcx, int mcy, int pNum){
+    public static void tile(int[][] board, int mcx, int mcy){
         if(board[0].length==2){
             fillPuzzle(board,pNum,mcx,mcy);
+            inrPNum();
             
         }else if(board[0].length>2){
             int msPos = getMCQuad(board[0].length, mcx,mcy);
@@ -169,11 +170,11 @@ public class Tromino_puzzle {
 
             divideBoard(board,subSquare1,subSquare2,subSquare3,subSquare4);
 
-            tile(subSquare1,getMCPosX(subSquare1),getMCPosY(subSquare1),ranPNum());
-            tile(subSquare2,getMCPosX(subSquare2),getMCPosY(subSquare2),ranPNum());
-            tile(subSquare3,getMCPosX(subSquare3),getMCPosY(subSquare3),ranPNum());
-            tile(subSquare4,getMCPosX(subSquare4),getMCPosY(subSquare4),ranPNum());
- 
+            tile(subSquare1,getMCPosX(subSquare1),getMCPosY(subSquare1));
+            tile(subSquare2,getMCPosX(subSquare2),getMCPosY(subSquare2));
+            tile(subSquare3,getMCPosX(subSquare3),getMCPosY(subSquare3));
+            tile(subSquare4,getMCPosX(subSquare4),getMCPosY(subSquare4));
+            
             mergeBoard(board[0].length,board,subSquare1,subSquare2,subSquare3,subSquare4);
         }
     }
@@ -181,10 +182,10 @@ public class Tromino_puzzle {
     public static void main(String[] args) {
         int msx = 2;
         int msy = 2;
-        
         int[][] board = new int[16][16];
         board[2][2] = 9;
-        tile(board,msx,msy,ranPNum());
+
+        tile(board,msx,msy);
         viewBoard(board[0].length,board);
     }
     
