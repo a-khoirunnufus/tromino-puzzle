@@ -7,16 +7,19 @@ package tromino_puzzle;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
-
+import java.util.Random;
 /**
  *
  * @author user
  */
 public class Tromino_puzzle {
-    public static int getPNum(int x){
-        x++;
-        return x;
+    public static int pNum = 1;
+    
+    public static int ranPNum(){
+        Random r = new Random();
+        return r.nextInt((4-1)+1)+1;
     }
+    
     //mengisi puzzle untuk board 2x2
     public static void fillPuzzle(int[][] board, int pNum, int msx, int msy){
         for(int x=0; x<2; x++){
@@ -79,8 +82,6 @@ public class Tromino_puzzle {
                             result4[x-SqSize/2][y-SqSize/2] = source[x][y];
                         }
                     }
-                default:
-                    System.out.println("not match");
             }
         }
     }
@@ -97,7 +98,7 @@ public class Tromino_puzzle {
     public static int getMCPosX(int[][] board){
         for(int x=0; x<board[0].length; x++){
             for(int y=0; y<board[0].length; y++){
-                if(board[x][y] == 5 || board[x][y] == -1){
+                if(board[x][y] == 5 || board[x][y] == 9){
                     return x;
                 }
             }
@@ -108,7 +109,7 @@ public class Tromino_puzzle {
     public static int getMCPosY(int[][] board){
         for(int x=0; x<board[0].length; x++){
             for(int y=0; y<board[0].length; y++){
-                if(board[x][y] == 5 || board[x][y] == -1){
+                if(board[x][y] == 5 || board[x][y] == 9){
                     return y;
                 }
             }
@@ -138,16 +139,13 @@ public class Tromino_puzzle {
         return msPos;
     }
     
-    public static void tile(int[][] board, int mcx, int mcy){
+    public static void tile(int[][] board, int mcx, int mcy, int pNum){
         if(board[0].length==2){
-            fillPuzzle(board,1,mcx,mcy);
-            System.out.println("jalan11");
+            fillPuzzle(board,pNum,mcx,mcy);
             
         }else if(board[0].length>2){
             int msPos = getMCQuad(board[0].length, mcx,mcy);
             int subSqSize = board[0].length/2;
-            
-            System.out.println("msPos="+msPos);
 
             //fill shaped tile in center square
             for(int i = 1; i<=4 ;i++){
@@ -161,17 +159,6 @@ public class Tromino_puzzle {
                     }else if(i==4){
                         board[subSqSize][subSqSize] = 5;
                     }
-//                    switch(i){
-//                        case 1:
-//                            board[subSqSize-1][subSqSize-1] = 5;
-//                        case 2:
-//                            board[subSqSize-1][subSqSize] = 5;
-//                        case 3:
-//                            board[subSqSize][subSqSize-1] = 5;
-//                            System.out.println("i="+i+"&msPos="+msPos);
-//                        case 4:
-//                            board[subSqSize][subSqSize] = 5;
-//                    }
                 }
             }
 
@@ -181,18 +168,12 @@ public class Tromino_puzzle {
             int[][] subSquare4 = new int[subSqSize][subSqSize];
 
             divideBoard(board,subSquare1,subSquare2,subSquare3,subSquare4);
-            viewBoard(2,subSquare1);
-            viewBoard(2,subSquare3);
-            //System.out.println(getMCPosX(subSquare1)+" "+getMCPosY(subSquare1));
-            tile(subSquare1,getMCPosX(subSquare1),getMCPosY(subSquare1));
-            tile(subSquare2,getMCPosX(subSquare2),getMCPosY(subSquare2));
-            tile(subSquare3,getMCPosX(subSquare3),getMCPosY(subSquare3));
-            tile(subSquare4,getMCPosX(subSquare4),getMCPosY(subSquare4));
-            System.out.println("======");
-            viewBoard(2,subSquare1);
-            viewBoard(2,subSquare3);
-            System.out.println("======");
-            
+
+            tile(subSquare1,getMCPosX(subSquare1),getMCPosY(subSquare1),ranPNum());
+            tile(subSquare2,getMCPosX(subSquare2),getMCPosY(subSquare2),ranPNum());
+            tile(subSquare3,getMCPosX(subSquare3),getMCPosY(subSquare3),ranPNum());
+            tile(subSquare4,getMCPosX(subSquare4),getMCPosY(subSquare4),ranPNum());
+ 
             mergeBoard(board[0].length,board,subSquare1,subSquare2,subSquare3,subSquare4);
         }
     }
@@ -200,11 +181,10 @@ public class Tromino_puzzle {
     public static void main(String[] args) {
         int msx = 2;
         int msy = 2;
-        int pNum = -1;
-        getPNum(pNum);
-        int[][] board = new int[8][8];
-        board[2][2] = -1;
-        tile(board,msx,msy);
+        
+        int[][] board = new int[16][16];
+        board[2][2] = 9;
+        tile(board,msx,msy,ranPNum());
         viewBoard(board[0].length,board);
     }
     
